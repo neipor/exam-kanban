@@ -70,5 +70,13 @@
     "edit_mode": "Editing",
     "advanced": "Advanced Options",
     "export_json": "Export Profile (JSON)"
+  },
+  "about": {
+    "title": "About",
+    "desc": "Exam Kanban is an immersive exam timer designed for students. Quiet, Elegant, Strict.",
+    "author": "Author: Xinhe Hu",
+    "github": "GitHub Repository",
+    "star_request": "If you like it, please give a Star 🌟",
+    "license": "GPL-3.0 License"
   }
 }

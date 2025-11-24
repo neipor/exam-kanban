@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, Settings, History, X, Trash2, Check, Lock, Unlock, ShieldAlert, Plus } from 'lucide-react';
+import { ArrowLeft, Settings, History, X, Trash2, Check, Lock, Unlock, ShieldAlert, Plus, Info } from 'lucide-react';
 import { useSchedule } from '../context/ScheduleContext';
 import useExamTimer from '../hooks/useExamTimer';
 import FocusMode from '../components/FocusMode';
 import AmbientMode from '../components/AmbientMode';
 import CollectionMode from '../components/CollectionMode';
+import AboutModal from '../components/AboutModal';
 import { useTranslation } from 'react-i18next';
 
 // Helper to format milliseconds into HH:MM:SS
@@ -28,6 +29,7 @@ const TimelinePage: React.FC = () => {
   const { t } = useTranslation();
   
   const [showHistory, setShowHistory] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [isKioskLocked, setIsKioskLocked] = useState(false);
   const [showEmergency, setShowEmergency] = useState(false);
   
@@ -225,29 +227,54 @@ const TimelinePage: React.FC = () => {
       </div>
 
       {/* --- Bottom Right: Settings & Emergency --- */}
-      <div className="fixed bottom-6 right-6 z-40 flex gap-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
          
-         {/* Emergency Toggle (Only if active exam) */}
-         {currentStatus === 'active' && (
-             <button
-                onClick={() => setShowEmergency(!showEmergency)}
-                className={`p-3 rounded-full backdrop-blur-sm transition-colors ${showEmergency ? 'bg-amber-600 text-white' : 'bg-black/40 hover:bg-amber-900/60 text-amber-500'}`}
-                title={t('emergency.title')}
-             >
-                 <ShieldAlert size={24} />
-             </button>
-         )}
+         <div className="flex gap-4">
+            {/* Emergency Toggle (Only if active exam) */}
+            {currentStatus === 'active' && (
+                <button
+                    onClick={() => setShowEmergency(!showEmergency)}
+                    className={`p-3 rounded-full backdrop-blur-sm transition-colors ${showEmergency ? 'bg-amber-600 text-white' : 'bg-black/40 hover:bg-amber-900/60 text-amber-500'}`}
+                    title={t('emergency.title')}
+                >
+                    <ShieldAlert size={24} />
+                </button>
+            )}
 
-         {/* Settings (Hidden if locked) */}
+            {/* About Button (Hidden if locked) */}
+            {!isKioskLocked && (
+                <button 
+                    onClick={() => setShowAbout(true)}
+                    className="bg-black/40 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm"
+                    title={t('about.title')}
+                >
+                <Info size={24} />
+                </button>
+            )}
+
+            {/* Settings (Hidden if locked) */}
+            {!isKioskLocked && (
+                <button 
+                    onClick={() => navigate('/import')}
+                    className="bg-black/40 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm"
+                >
+                <Settings size={24} />
+                </button>
+            )}
+         </div>
+         
+         {/* Author Footer */}
          {!isKioskLocked && (
-            <button 
-                onClick={() => navigate('/import')}
-                className="bg-black/40 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm"
-            >
-            <Settings size={24} />
-            </button>
+             <div className="text-[10px] text-gray-500 font-mono tracking-widest mt-1 select-none">
+                 © 2025 Xinhe Hu | GPLv3
+             </div>
          )}
       </div>
+
+      {/* --- About Modal --- */}
+      <AnimatePresence>
+        {showAbout && <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />}
+      </AnimatePresence>
 
       {/* --- Emergency Dashboard Overlay --- */}
       <AnimatePresence>
