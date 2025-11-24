@@ -7,6 +7,14 @@ Exam Kanban 是一款专为学生和备考者设计的桌面端考试日程管�
 
 ![License](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
+## 🌐 在线体验
+
+**[👉 点击立即体验 Web 版 (Demo)](https://exam-kanban.huarch.top/)**
+
+*Powered by **Cloudflare Pages*** ⚡️
+
+> **注意**：Web 版仅供功能体验和演示。包含完整系统级功能（如开机自启、Kiosk 锁定、离线运行等）的**原生桌面版 (Windows/macOS)** 正在紧张打包中，稍后发布，敬请期待！
+
 ## ✨ 设计理念
 
 我是一名来自**天津四十二中**的高中生。
@@ -40,9 +48,8 @@ Exam Kanban 是一款专为学生和备考者设计的桌面端考试日程管�
 *   **UI/UX**: Tailwind CSS, Framer Motion (负责所有丝滑的动画效果)
 *   **Architecture**: 采用 React Context + Custom Hooks 状态机模式，确保计时的绝对精准与逻辑的解耦。
 
-## 💻 如何使用
+## 💻 如何开发
 
-### 开发
 ```bash
 # 克隆仓库
 git clone https://github.com/neipor/exam-kanban.git
