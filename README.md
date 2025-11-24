@@ -1,73 +1,75 @@
-# React + TypeScript + Vite
+# Exam Kanban (考试看板)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> "专注当下，掌控时间。"
 
-Currently, two official plugins are available:
+Exam Kanban 是一款专为学生和备考者设计的桌面端考试日程管理与看板工具。
+它不仅仅是一个倒计时器，更是一个优雅的时间线可视化系统，旨在用最直观、美观的方式展示考试进程，帮助你在高强度的考试周里保持从容。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![License](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
-## React Compiler
+## ✨ 设计理念
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+我是一名来自**天津四十二中**的高中生。
 
-## Expanding the ESLint configuration
+在日常的测验和备考中，我发现**市面上大多数的计时工具要么设计粗糙，要么充斥着让人焦虑的红色倒计时**。这种视觉上的压迫感往往会起到反作用。我认为，**真正优秀的辅助工具应该是安静、克制且优雅的**。
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+*   **视觉美学**：摒弃了传统的枯燥数字，使用流动的光影和呼吸感动画来表达时间的流逝。
+*   **秩序感**：通过清晰的左侧看板和右侧侧边栏，让你时刻清楚“现在在哪”、“接下来做什么”。
+*   **仪式感**：从"开始答题"到"立即停笔"的收卷时刻，每一个环节都有专门设计的交互，还原真实的考场节奏，但多了一份电子时代的精致。
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 核心功能
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+*   **沉浸式专注模式 (Focus Mode)**：
+    *   全屏无干扰设计。
+    *   根据剩余时间智能切换环境光效（冷静蓝 -> 专注金 -> 最终时刻）。
+    *   *注：为了不制造焦虑，即使在最后时刻，我们也克制地使用了柔和的提示光，而非刺眼的警报。*
+*   **智能考场逻辑**：
+    *   **自动流转**：支持多科目连续排程，自动在"考试中"、"收卷中"、"休息中"状态间切换。
+    *   **收卷模式 (Collection Mode)**：考试结束后的专属状态，优雅地提示停止答题。
+    *   **监考控制台**：内置隐藏式控制面板，支持特殊情况下的时间调整（补时），并配备长按防误触锁。
+*   **灵活的数据管理**：
+    *   支持 JSON 格式的考程配置一键导入/导出。
+    *   支持本地持久化存储，断电不丢失进度。
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🛠️ 技术细节
+
+本项目基于现代 Web 技术栈构建，并封装为原生桌面应用：
+
+*   **Frontend**: React 19, TypeScript, Vite
+*   **Desktop**: Electron
+*   **UI/UX**: Tailwind CSS, Framer Motion (负责所有丝滑的动画效果)
+*   **Architecture**: 采用 React Context + Custom Hooks 状态机模式，确保计时的绝对精准与逻辑的解耦。
+
+## 💻 如何使用
+
+### 安装
+（可以在此放置 Release 下载链接）
+
+### 开发
+```bash
+# 克隆仓库
+git clone https://github.com/neipor/exam-kanban.git
+
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run electron:serve
+
+# 打包构建
+npm run electron:build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 👨‍💻 作者
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+**Xinhe Hu** (@neipor)
+📍 天津四十二中 (Tianjin No.42 High School)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+这是一个高中生的课余作品。如果你觉得这个小工具让你的备考时光稍微美好了一点点，或者有任何改进建议，欢迎通过邮件联系我。
+
+📧 Email: `neitherportal@proton.me`
+
+---
+
+**License**
+[GNU General Public License v3.0](./LICENSE) © 2025 Xinhe Hu
