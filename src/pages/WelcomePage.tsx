@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion, type Variants } from 'framer-motion';
-import { Clock, Settings, PlayCircle, ArrowRight } from 'lucide-react'; // Reverted to safe icons
+import { motion, type Variants, AnimatePresence } from 'framer-motion';
+import { Clock, Settings, PlayCircle, ArrowRight, Info } from 'lucide-react'; // Reverted to safe icons
 import { useSchedule } from '../context/ScheduleContext';
+import AboutModal from '../components/AboutModal';
 
 // --- Animation Variants ---
 const containerVariants: Variants = {
@@ -94,6 +95,7 @@ const WelcomePage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { activeSchedule } = useSchedule();
+  const [showAbout, setShowAbout] = React.useState(false);
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'zh' ? 'en' : 'zh';
@@ -226,14 +228,28 @@ const WelcomePage: React.FC = () => {
             </span>
             <span>{new Date().getFullYear()} © KANBAN</span>
           </div>
-          <button 
-            onClick={toggleLanguage} 
-            className="hover:text-white transition-colors uppercase tracking-widest"
-          >
-            {i18n.language === 'zh' ? 'EN / 中文' : 'ENGLISH / 中文'}
-          </button>
+          <div className="flex gap-6">
+            <button 
+                onClick={() => setShowAbout(true)}
+                className="hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest"
+            >
+                <Info size={14} />
+                ABOUT
+            </button>
+            <button 
+                onClick={toggleLanguage} 
+                className="hover:text-white transition-colors uppercase tracking-widest"
+            >
+                {i18n.language === 'zh' ? 'EN / 中文' : 'ENGLISH / 中文'}
+            </button>
+          </div>
         </motion.div>
       </motion.div>
+
+      {/* About Modal */}
+      <AnimatePresence>
+        {showAbout && <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />}
+      </AnimatePresence>
     </div>
   );
 };

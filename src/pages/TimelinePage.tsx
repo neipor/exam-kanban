@@ -227,7 +227,7 @@ const TimelinePage: React.FC = () => {
       </div>
 
       {/* --- Bottom Right: Settings & Emergency --- */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2 opacity-40 hover:opacity-100 transition-opacity duration-300">
          
          <div className="flex gap-4">
             {/* Emergency Toggle (Only if active exam) */}
