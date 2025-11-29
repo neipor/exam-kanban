@@ -88,7 +88,8 @@ const AmbientMode: React.FC<AmbientModeProps> = ({
         className="absolute inset-0 pointer-events-none opacity-20"
         style={{
           backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
-          backgroundSize: '32px 32px'
+          backgroundSize: '32px 32px',
+          willChange: 'opacity'
         }}
       />
       <div className={`absolute inset-0 bg-gradient-to-b ${theme.bgGradient} pointer-events-none transition-colors duration-1000`} />
@@ -97,7 +98,11 @@ const AmbientMode: React.FC<AmbientModeProps> = ({
           <motion.div 
             animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vh] h-[80vh] rounded-full blur-[120px] pointer-events-none transition-colors duration-1000 ${theme.orbColor}`}
+            style={{ 
+                background: 'radial-gradient(circle, rgba(30, 58, 138, 0.4) 0%, transparent 70%)', // Simulated blur with gradient
+                willChange: 'transform, opacity'
+            }}
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vmin] h-[70vmin] rounded-full pointer-events-none transition-colors duration-1000`}
           />
       )}
 
@@ -107,14 +112,14 @@ const AmbientMode: React.FC<AmbientModeProps> = ({
         <motion.h2 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-3xl md:text-5xl font-bold text-gray-300 tracking-tight font-['Outfit'] mb-4"
+          className="text-[5vmin] md:text-5xl font-bold text-gray-300 tracking-tight font-['Outfit'] mb-4"
         >
           {nextExam ? nextExam.subject : t('timeline.all_finished')}
         </motion.h2>
 
         <div className="relative group w-full flex justify-center">
           <h1 
-            className={`leading-none font-bold tabular-nums tracking-tighter transition-colors duration-300 ${theme.textColor} ${!nextExam ? 'text-[10vw] tracking-normal uppercase' : 'text-[18vw]'}`}
+            className={`leading-none font-bold tabular-nums tracking-tighter transition-colors duration-300 ${theme.textColor} ${!nextExam ? 'text-[10vmin] tracking-normal uppercase' : 'text-[22vmin]'}`}
           >
             {nextExam ? timeString : "DONE"}
           </h1>
@@ -171,7 +176,11 @@ const AmbientMode: React.FC<AmbientModeProps> = ({
       <div className="fixed bottom-0 left-0 w-full h-[4px] bg-gray-900 z-30">
         <div 
           className={`h-full ${theme.barColor}`}
-          style={{ width: `${progress}%`, transition: 'width 1s linear' }}
+          style={{ 
+              transform: `scaleX(${progress / 100})`, 
+              transformOrigin: 'left',
+              transition: 'transform 1s linear' 
+          }}
         />
       </div>
 

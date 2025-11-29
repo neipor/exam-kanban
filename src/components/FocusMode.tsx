@@ -113,15 +113,20 @@ const FocusMode: React.FC<FocusModeProps> = ({
       <motion.div 
         animate={{ opacity: isDead ? 1 : [0.5, 0.7, 0.5] }}
         transition={{ duration: isDead ? 0 : 4, repeat: Infinity, ease: "easeInOut" }}
+        style={{ willChange: 'opacity' }}
         className={`absolute inset-0 bg-gradient-to-b ${theme.bgGradient} pointer-events-none transition-all duration-1000`}
       />
 
       {/* 3. Central Orb (Only when alive) */}
       {!isDead && (
           <motion.div 
-            animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+            animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }} // Lower opacity since we use solid currentColor
             transition={{ duration: theme.pulseSpeed || 4, repeat: Infinity, ease: "easeInOut" }}
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vh] h-[80vh] rounded-full blur-[120px] pointer-events-none transition-colors duration-1000 ${theme.orbColor}`}
+            style={{ 
+                background: 'radial-gradient(closest-side, currentColor, transparent)',
+                willChange: 'transform, opacity'
+            }}
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vmin] h-[70vmin] rounded-full pointer-events-none transition-colors duration-1000 ${theme.textColor}`} 
           />
       )}
       
@@ -131,13 +136,13 @@ const FocusMode: React.FC<FocusModeProps> = ({
       )}
 
       {/* --- Main Content --- */}
-      <div className="z-10 flex flex-col items-center text-center w-full max-w-7xl px-4 relative">
+      <div className="z-10 flex flex-col items-center text-center w-full max-w-[90vw] px-4 relative">
         
         {/* Subject Title */}
         <motion.h2 
           initial={{ opacity: 0 }}
           animate={{ opacity: isDead ? 0.3 : 1 }}
-          className="text-3xl md:text-5xl font-bold text-white tracking-tight font-['Outfit'] mb-8 transition-opacity duration-500"
+          className="text-[5vmin] md:text-5xl font-bold text-white tracking-tight font-['Outfit'] mb-4 md:mb-8 transition-opacity duration-500"
         >
           {currentExam.subject}
         </motion.h2>
@@ -145,7 +150,7 @@ const FocusMode: React.FC<FocusModeProps> = ({
         {/* THE TIMER or STATUS */}
         <div className="relative group w-full flex justify-center">
           <motion.h1 
-            className={`leading-none font-bold tabular-nums tracking-tighter transition-all duration-300 ${theme.textColor} ${theme.textGlow} ${isDead ? 'text-[10vw] tracking-normal uppercase' : 'text-[18vw]'}`}
+            className={`leading-none font-bold tabular-nums tracking-tighter transition-all duration-300 ${theme.textColor} ${theme.textGlow} ${isDead ? 'text-[10vmin] tracking-normal uppercase' : 'text-[22vmin]'}`}
             // Heartbeat effect for final minute (only if alive)
             animate={!isDead && theme.phase === 'final' ? { opacity: [0.9, 1, 0.9] } : { opacity: 1 }}
             transition={{ duration: 1, repeat: Infinity }}
@@ -169,7 +174,11 @@ const FocusMode: React.FC<FocusModeProps> = ({
       <div className="fixed bottom-0 left-0 w-full h-1 bg-gray-900/50">
         <motion.div 
           className={`h-full ${isDead ? 'bg-gray-600' : 'bg-white'} shadow-[0_0_10px_currentColor]`}
-          style={{ width: `${progress}%` }}
+          style={{ 
+              transform: `scaleX(${progress / 100})`, 
+              transformOrigin: 'left',
+              willChange: 'transform'
+          }}
           transition={{ duration: 1, ease: "linear" }}
         />
       </div>

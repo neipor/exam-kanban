@@ -196,7 +196,7 @@ const TimelinePage: React.FC = () => {
             onMouseLeave={handleExitPressEnd}
             onTouchStart={handleExitPressStart}
             onTouchEnd={handleExitPressEnd}
-            className={`p-3 rounded-full backdrop-blur-sm transition-all duration-300 relative overflow-hidden ${isKioskLocked ? 'bg-red-900/50 text-red-200 hover:bg-red-900/80' : 'bg-black/20 hover:bg-black/60 text-white opacity-0 group-hover:opacity-100'}`}
+            className={`p-3 rounded-full backdrop-blur-sm transition-all duration-300 relative overflow-hidden ${isKioskLocked ? 'bg-red-900/50 text-red-200 hover:bg-red-900/80' : 'bg-black/20 hover:bg-black/60 text-white'}`}
             title={isKioskLocked ? t('emergency.unlock_exit') : t('timeline.exit')}
             >
             {isKioskLocked ? <Lock size={24} /> : <ArrowLeft size={24} />}
@@ -207,7 +207,7 @@ const TimelinePage: React.FC = () => {
         {!isKioskLocked && (
             <button 
             onClick={() => setShowHistory(true)}
-            className="bg-black/20 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+            className="bg-black/20 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all"
             title={t('timeline.select_history')}
             >
             <History size={24} />
@@ -218,7 +218,7 @@ const TimelinePage: React.FC = () => {
         {!isKioskLocked && (
              <button 
              onClick={() => setIsKioskLocked(true)}
-             className="bg-black/20 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+             className="bg-black/20 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all"
              title="Lock Interface (Kiosk Mode)"
              >
              <Unlock size={24} />
@@ -227,7 +227,7 @@ const TimelinePage: React.FC = () => {
       </div>
 
       {/* --- Bottom Right: Settings & Emergency --- */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2 opacity-40 hover:opacity-100 transition-opacity duration-300">
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2">
          
          <div className="flex gap-4">
             {/* Emergency Toggle (Only if active exam) */}
@@ -328,7 +328,7 @@ const TimelinePage: React.FC = () => {
             <motion.div
               initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed top-0 left-0 h-full w-80 bg-gray-900 border-r border-gray-800 z-50 p-6 shadow-2xl"
+              className="fixed top-0 left-0 h-full w-full md:w-80 bg-gray-900 border-r border-gray-800 z-50 p-6 shadow-2xl"
             >
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-xl font-bold text-white">{t('timeline.history_list')}</h2>

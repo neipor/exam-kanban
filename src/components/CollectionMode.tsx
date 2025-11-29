@@ -17,31 +17,36 @@ const CollectionMode: React.FC<CollectionModeProps> = ({ currentExam }) => {
       <motion.div 
         animate={{ opacity: [0, 0.2, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        style={{ willChange: 'opacity' }}
         className="absolute inset-0 bg-red-600 pointer-events-none"
       />
 
       {/* Content */}
-      <div className="z-10 flex flex-col items-center text-center max-w-4xl px-6 relative">
+      <div className="z-10 flex flex-col items-center text-center max-w-[90vw] px-6 relative">
         
         <motion.div
           animate={{ scale: [1, 1.1, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="mb-8 text-red-500"
+          style={{ willChange: 'transform' }}
+          className="mb-4 md:mb-8 text-red-500"
         >
-           <AlertTriangle size={80} strokeWidth={1.5} />
+           <AlertTriangle size={80} strokeWidth={1.5} className="w-[15vmin] h-[15vmin]" />
         </motion.div>
 
-        <h2 className="text-2xl md:text-3xl font-medium text-red-200 opacity-80 mb-4 tracking-widest uppercase">
+        <h2 className="text-[4vmin] md:text-3xl font-medium text-red-200 opacity-80 mb-2 md:mb-4 tracking-widest uppercase">
           {currentExam.subject}
         </h2>
 
         <div className="relative">
-          <h1 className="text-6xl md:text-9xl font-black text-white tracking-tighter uppercase drop-shadow-[0_0_30px_rgba(220,38,38,0.8)]">
+          <h1 
+            className="text-[15vmin] md:text-9xl font-black text-white tracking-tighter uppercase leading-none"
+            style={{ textShadow: '0 0 30px rgba(220,38,38,0.8)' }}
+          >
             {t('timeline.pens_down')}
           </h1>
         </div>
 
-        <p className="mt-8 text-xl md:text-2xl text-red-100 font-bold tracking-wide bg-red-900/30 px-6 py-3 rounded-full border border-red-500/30">
+        <p className="mt-4 md:mt-8 text-[3vmin] md:text-2xl text-red-100 font-bold tracking-wide bg-red-900/30 px-6 py-3 rounded-full border border-red-500/30">
            {t('timeline.wait_for_collection')}
         </p>
 
