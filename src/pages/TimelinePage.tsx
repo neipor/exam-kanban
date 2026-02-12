@@ -173,7 +173,7 @@ const TimelinePage: React.FC = () => {
       </AnimatePresence>
 
       {/* --- Controls Overlay (Bottom Left) --- */}
-      <div className="fixed bottom-6 left-6 z-40 flex gap-4 group">
+      <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 flex gap-2 sm:gap-4 group">
         
         {/* Exit / Back Button (With Kiosk Logic) */}
         <div className="relative">
@@ -193,10 +193,10 @@ const TimelinePage: React.FC = () => {
             onMouseLeave={handleExitPressEnd}
             onTouchStart={handleExitPressStart}
             onTouchEnd={handleExitPressEnd}
-            className={`p-3 rounded-full backdrop-blur-sm transition-all duration-300 relative overflow-hidden ${isKioskLocked ? 'bg-red-900/50 text-red-200 hover:bg-red-900/80' : 'bg-black/20 hover:bg-black/60 text-white'}`}
+            className={`p-2.5 sm:p-3 rounded-full backdrop-blur-sm transition-all duration-300 relative overflow-hidden ${isKioskLocked ? 'bg-red-900/50 text-red-200 hover:bg-red-900/80' : 'bg-black/20 hover:bg-black/60 text-white'}`}
             title={isKioskLocked ? t('emergency.unlock_exit') : t('timeline.exit')}
             >
-            {isKioskLocked ? <Lock size={24} /> : <ArrowLeft size={24} />}
+            {isKioskLocked ? <Lock size={20} className="sm:w-6 sm:h-6" /> : <ArrowLeft size={20} className="sm:w-6 sm:h-6" />}
             </button>
         </div>
 
@@ -204,10 +204,10 @@ const TimelinePage: React.FC = () => {
         {!isKioskLocked && (
             <button 
             onClick={() => setShowHistory(true)}
-            className="bg-black/20 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+            className="bg-black/20 hover:bg-black/60 text-white p-2.5 sm:p-3 rounded-full backdrop-blur-sm transition-all"
             title={t('timeline.select_history')}
             >
-            <History size={24} />
+            <History size={20} className="sm:w-6 sm:h-6" />
             </button>
         )}
 
@@ -215,26 +215,26 @@ const TimelinePage: React.FC = () => {
         {!isKioskLocked && (
              <button 
              onClick={() => setIsKioskLocked(true)}
-             className="bg-black/20 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+             className="bg-black/20 hover:bg-black/60 text-white p-2.5 sm:p-3 rounded-full backdrop-blur-sm transition-all"
              title="Lock Interface (Kiosk Mode)"
              >
-             <Unlock size={24} />
+             <Unlock size={20} className="sm:w-6 sm:h-6" />
              </button>
         )}
       </div>
 
       {/* --- Bottom Right: Settings & Emergency --- */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2">
          
-         <div className="flex gap-4">
+         <div className="flex gap-2 sm:gap-4">
             {/* Emergency Toggle (Only if active exam) */}
             {currentStatus === 'active' && (
                 <button
                     onClick={() => setShowEmergency(!showEmergency)}
-                    className={`p-3 rounded-full backdrop-blur-sm transition-colors ${showEmergency ? 'bg-amber-600 text-white' : 'bg-black/40 hover:bg-amber-900/60 text-amber-500'}`}
+                    className={`p-2.5 sm:p-3 rounded-full backdrop-blur-sm transition-colors ${showEmergency ? 'bg-amber-600 text-white' : 'bg-black/40 hover:bg-amber-900/60 text-amber-500'}`}
                     title={t('emergency.title')}
                 >
-                    <ShieldAlert size={24} />
+                    <ShieldAlert size={20} className="sm:w-6 sm:h-6" />
                 </button>
             )}
 
@@ -242,10 +242,10 @@ const TimelinePage: React.FC = () => {
             {!isKioskLocked && (
                 <button 
                     onClick={() => setShowAbout(true)}
-                    className="bg-black/40 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm"
+                    className="bg-black/40 hover:bg-black/60 text-white p-2.5 sm:p-3 rounded-full backdrop-blur-sm"
                     title={t('about.title')}
                 >
-                <Info size={24} />
+                <Info size={20} className="sm:w-6 sm:h-6" />
                 </button>
             )}
 
@@ -253,16 +253,16 @@ const TimelinePage: React.FC = () => {
             {!isKioskLocked && (
                 <button 
                     onClick={() => navigate('/import')}
-                    className="bg-black/40 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm"
+                    className="bg-black/40 hover:bg-black/60 text-white p-2.5 sm:p-3 rounded-full backdrop-blur-sm"
                 >
-                <Settings size={24} />
+                <Settings size={20} className="sm:w-6 sm:h-6" />
                 </button>
             )}
          </div>
          
-         {/* Author Footer */}
+         {/* Author Footer - Hidden on mobile */}
          {!isKioskLocked && (
-             <div className="text-[10px] text-gray-500 font-mono tracking-widest mt-1 select-none">
+             <div className="hidden sm:block text-[10px] text-gray-500 font-mono tracking-widest mt-1 select-none">
                  © 2025 Xinhe Hu | GPLv3
              </div>
          )}

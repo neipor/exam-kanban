@@ -305,16 +305,16 @@ const ImportPage: React.FC = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-[#050505]/90 backdrop-blur-2xl border-t border-white/[0.06] p-6 z-50">
+      <div className="fixed bottom-0 left-0 w-full bg-[#050505]/90 backdrop-blur-2xl border-t border-white/[0.06] p-4 sm:p-6 z-50 safe-area-bottom">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-3 sm:gap-5">
                 <button 
                 onClick={() => navigate('/')} 
-                className="p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-200"
+                className="p-2.5 sm:p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-200"
                 >
-                <ArrowLeft size={20} className="text-white/60" />
+                <ArrowLeft size={18} className="sm:w-5 sm:h-5 text-white/60" />
                 </button>
-                <div>
+                <div className="hidden sm:block">
                 <h1 className="text-xl font-medium text-white/90 tracking-tight">{t('import.title')}</h1>
                 <div className="flex items-center gap-2 text-xs text-white/40 mt-1 font-mono">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
@@ -325,9 +325,9 @@ const ImportPage: React.FC = () => {
             
             <button 
                 onClick={() => navigate('/timeline')}
-                className="px-6 py-3.5 bg-white text-black rounded-xl font-medium hover:bg-white/90 transition-all duration-200 flex items-center gap-2.5 shadow-lg shadow-white/10"
+                className="px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white text-black rounded-xl font-medium hover:bg-white/90 transition-all duration-200 flex items-center gap-2 sm:gap-2.5 shadow-lg shadow-white/10 text-sm sm:text-base"
             >
-                <PlayCircle size={20} />
+                <PlayCircle size={18} className="sm:w-5 sm:h-5" />
                 <span>{t('import.start_btn')}</span>
             </button>
         </div>
