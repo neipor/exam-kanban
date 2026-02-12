@@ -17,72 +17,41 @@ const FocusMode: React.FC<FocusModeProps> = ({
   currentTime,
 }) => {
   const { t } = useTranslation();
-
   const isDead = timeUntilEnd <= 0;
 
-  // 1. Calculate Theme based on phases
+  // Sophisticated color system
   const theme = useMemo(() => {
     if (isDead) {
-        return {
-            phase: 'dead',
-            textColor: 'text-gray-500', // Greyed out
-            glowColor: 'shadow-none',
-            bgGradient: 'from-gray-900 to-black', // Cold, dead slate
-            orbColor: 'opacity-0', // No orb
-            borderColor: 'border-gray-700',
-        };
+      return {
+        textColor: 'text-white/40',
+        accentColor: 'bg-white/20',
+        status: 'finished',
+      };
     }
 
     const minutesLeft = timeUntilEnd / 60000;
     
-    if (minutesLeft <= 1) {
+    if (minutesLeft <= 5) {
       return {
-        phase: 'final', // < 1 min: Final Countdown (Deep Crimson)
-        textColor: 'text-red-500', 
-        textGlow: 'drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]', // Subtle white glow
-        glowColor: 'shadow-red-900/50',
-        bgGradient: 'from-red-950 via-black to-black',
-        orbColor: 'bg-red-600/20',
-        borderColor: 'border-red-500/50',
-        pulseSpeed: 0.8 // Fast Pulse
-      };
-    } else if (minutesLeft <= 5) {
-      return {
-        phase: 'critical', // < 5 min: Crimson Red (Adrenaline)
-        textColor: 'text-red-400',
-        textGlow: 'drop-shadow-[0_0_15px_rgba(248,113,113,0.5)]',
-        glowColor: 'shadow-red-900/40',
-        bgGradient: 'from-red-950/40 via-black to-black',
-        orbColor: 'bg-red-500/10',
-        borderColor: 'border-red-500/30',
-        pulseSpeed: 0 
+        textColor: 'text-rose-200',
+        accentColor: 'bg-rose-500/30',
+        status: 'final',
       };
     } else if (minutesLeft <= 15) {
       return {
-        phase: 'warning', // < 15 min: Amber (Alert)
-        textColor: 'text-amber-400',
-        textGlow: 'drop-shadow-[0_0_10px_rgba(251,191,36,0.4)]',
-        glowColor: 'shadow-amber-900/30',
-        bgGradient: 'from-amber-950/30 via-black to-black',
-        orbColor: 'bg-amber-500/5',
-        borderColor: 'border-amber-500/20',
-        pulseSpeed: 0
+        textColor: 'text-amber-200',
+        accentColor: 'bg-amber-500/20',
+        status: 'warning',
       };
     } else {
       return {
-        phase: 'flow', // Normal: Ice Blue / White (Rationality)
-        textColor: 'text-cyan-50', // Almost white, slight cool tint
-        textGlow: 'drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]', // Cyan-400 glow
-        glowColor: 'shadow-cyan-500/20',
-        bgGradient: 'from-cyan-950/30 via-black to-black',
-        orbColor: 'bg-cyan-500/5',
-        borderColor: 'border-cyan-500/10',
-        pulseSpeed: 8 // Deep, slow breath
+        textColor: 'text-slate-200',
+        accentColor: 'bg-blue-500/20',
+        status: 'normal',
       };
     }
   }, [timeUntilEnd, isDead]);
 
-  // Progress stays at 100% if dead
   const progress = useMemo(() => {
     if (!currentExam) return 0;
     if (isDead) return 100;
@@ -93,96 +62,74 @@ const FocusMode: React.FC<FocusModeProps> = ({
 
   if (!currentExam) return null;
 
-  return (
-    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col items-center justify-center overflow-hidden font-['JetBrains_Mono'] selection:bg-white/20">
+    return (
+    <div className="fixed inset-0 h-screen w-screen bg-[#050505] flex items-center justify-center overflow-hidden">
+      {/* Subtle vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] pointer-events-none" />
       
-      {/* --- Background Layers --- */}
-      
-      {/* 1. Dot Matrix (Only visible when alive) */}
-      {!isDead && (
-        <div 
-            className="absolute inset-0 pointer-events-none opacity-20"
-            style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
-            backgroundSize: '32px 32px'
-            }}
-        />
-      )}
+      {/* Ambient glow */}
+      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[150px] opacity-20 transition-colors duration-1000 ${theme.accentColor}`} />
 
-      {/* 2. Mood Gradient */}
-      <motion.div 
-        animate={{ opacity: isDead ? 1 : [0.5, 0.7, 0.5] }}
-        transition={{ duration: isDead ? 0 : 4, repeat: Infinity, ease: "easeInOut" }}
-        style={{ willChange: 'opacity' }}
-        className={`absolute inset-0 bg-gradient-to-b ${theme.bgGradient} pointer-events-none transition-all duration-1000`}
-      />
-
-      {/* 3. Central Orb (Only when alive) */}
-      {!isDead && (
-          <motion.div 
-            animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }} // Lower opacity since we use solid currentColor
-            transition={{ duration: theme.pulseSpeed || 4, repeat: Infinity, ease: "easeInOut" }}
-            style={{ 
-                background: 'radial-gradient(closest-side, currentColor, transparent)',
-                willChange: 'transform, opacity'
-            }}
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vmin] h-[70vmin] rounded-full pointer-events-none transition-colors duration-1000 ${theme.textColor}`} 
-          />
-      )}
-      
-      {/* 4. Dead Overlay (Gray wash) */}
-      {isDead && (
-          <div className="absolute inset-0 bg-black/80 backdrop-grayscale z-0 pointer-events-none" />
-      )}
-
-      {/* --- Main Content --- */}
-      <div className="z-10 flex flex-col items-center text-center w-full max-w-[90vw] px-4 relative">
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center text-center w-full max-w-4xl px-4">
         
-        {/* Subject Title */}
-        <motion.h2 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isDead ? 0.3 : 1 }}
-          className="text-[5vmin] md:text-5xl font-bold text-white tracking-tight font-['Outfit'] mb-4 md:mb-8 transition-opacity duration-500"
+        {/* Subject - clear and readable */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-4 md:mb-6"
         >
-          {currentExam.subject}
-        </motion.h2>
-
-        {/* THE TIMER or STATUS */}
-        <div className="relative group w-full flex justify-center">
-          <motion.h1 
-            className={`leading-none font-bold tabular-nums tracking-tighter transition-all duration-300 ${theme.textColor} ${theme.textGlow} ${isDead ? 'text-[10vmin] tracking-normal uppercase' : 'text-[22vmin]'}`}
-            // Heartbeat effect for final minute (only if alive)
-            animate={!isDead && theme.phase === 'final' ? { opacity: [0.9, 1, 0.9] } : { opacity: 1 }}
-            transition={{ duration: 1, repeat: Infinity }}
-          >
-            {isDead ? t('timeline.exam_finished_status') : formatTime(timeUntilEnd)}
-          </motion.h1>
-        </div>
-
-        {/* End Time Info */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isDead ? 0.2 : 0.6 }}
-          className="mt-12 text-gray-400 font-mono text-lg tracking-widest"
-        >
-          {t('timeline.ends_at')} <span className="text-white">{currentExam.endTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+          <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-white/50 font-medium mb-2 block">
+            {t('timeline.subject')}
+          </span>
+          <h2 className="text-3xl md:text-5xl font-semibold text-white tracking-tight">
+            {currentExam.subject}
+          </h2>
         </motion.div>
 
+        {/* Timer - main focus - BIGGER AND BOLDER */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="relative"
+        >
+          <h1 className={`text-[22vmin] md:text-[200px] font-bold tabular-nums tracking-tighter leading-none ${theme.textColor} transition-colors duration-700`}>
+            {isDead ? (
+              <span className="text-5xl md:text-7xl font-bold tracking-wide uppercase">{t('timeline.exam_finished_status')}</span>
+            ) : (
+              formatTime(timeUntilEnd)
+            )}
+          </h1>
+        </motion.div>
+
+        {/* End time - clear detail */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-6 md:mt-8"
+        >
+          <span className="text-base md:text-lg text-white/50 font-mono tracking-wider">
+            {t('timeline.ends_at')} {' '}
+            <span className="text-white font-medium">
+              {currentExam.endTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            </span>
+          </span>
+        </motion.div>
       </div>
 
-      {/* --- Footer Progress --- */}
-      <div className="fixed bottom-0 left-0 w-full h-1 bg-gray-900/50">
+      {/* Bottom progress bar - thicker */}
+      <div className="fixed bottom-0 left-0 w-full h-[4px] bg-white/10">
         <motion.div 
-          className={`h-full ${isDead ? 'bg-gray-600' : 'bg-white'} shadow-[0_0_10px_currentColor]`}
+          className={`h-full ${isDead ? 'bg-white/40' : 'bg-white'}`}
           style={{ 
-              transform: `scaleX(${progress / 100})`, 
-              transformOrigin: 'left',
-              willChange: 'transform'
+            width: `${progress}%`,
           }}
           transition={{ duration: 1, ease: "linear" }}
         />
       </div>
-
     </div>
   );
 };

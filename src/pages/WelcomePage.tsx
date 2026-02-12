@@ -1,94 +1,10 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion, type Variants, AnimatePresence } from 'framer-motion';
-import { Clock, Settings, PlayCircle, ArrowRight, Info } from 'lucide-react'; // Reverted to safe icons
+import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, Settings, PlayCircle, ArrowRight, Info } from 'lucide-react';
 import { useSchedule } from '../context/ScheduleContext';
 import AboutModal from '../components/AboutModal';
-
-// --- Animation Variants ---
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08, // Faster sequence
-      delayChildren: 0.1,    // Less initial wait
-    },
-  },
-};
-
-const titleVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
-    transition: { duration: 0.6, ease: "easeOut" } 
-  },
-};
-
-const lineVariants: Variants = {
-  hidden: { scaleX: 0, opacity: 0 },
-  visible: { 
-    scaleX: 1, 
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" }
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 20, scale: 0.98 }, // Reduced movement distance
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    scale: 1,
-    // Use standard easing instead of spring for better performance on low-end devices
-    transition: { duration: 0.5, ease: "circOut" } 
-  },
-};
-
-// --- Components ---
-
-const BentoCard = ({ 
-  title, 
-  subtitle, 
-  icon: Icon, 
-  onClick, 
-  className = "",
-  accentColor = "text-blue-400",
-}: { 
-  title: string; 
-  subtitle?: string; 
-  icon: any; 
-  onClick: () => void; 
-  className?: string;
-  accentColor?: string;
-}) => (
-  <motion.div
-    variants={cardVariants}
-    whileTap={{ scale: 0.98 }}
-    onClick={onClick}
-    style={{ willChange: "transform, opacity" }} // Hint browser to optimize
-    className={`relative flex flex-col justify-between p-6 md:p-8 rounded-3xl cursor-pointer transition-colors duration-200 group overflow-hidden bg-[#111]/90 border border-white/10 hover:bg-[#1a1a1a] hover:border-white/30 ${className}`}
-  >
-    {/* Hover Highlight Gradient Overlay - Simplified */}
-    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-
-    <div className="flex justify-between items-start z-10">
-      <div className={`p-3 rounded-2xl bg-white/5 border border-white/10 text-white transition-colors group-hover:bg-white/10 ${accentColor}`}>
-        <Icon size={28} strokeWidth={1.5} />
-      </div>
-      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 -mr-2 -mt-2">
-        <ArrowRight className="text-white/50" />
-      </div>
-    </div>
-
-    <div className="z-10 mt-6 md:mt-8">
-      <h3 className="text-xl md:text-2xl font-bold text-white/90 mb-1 tracking-tight group-hover:text-white transition-colors">{title}</h3>
-      {subtitle && <p className="text-sm text-gray-400 font-light tracking-wide group-hover:text-gray-300 transition-colors truncate">{subtitle}</p>}
-    </div>
-  </motion.div>
-);
 
 const WelcomePage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -101,7 +17,6 @@ const WelcomePage: React.FC = () => {
     i18n.changeLanguage(newLang);
   };
 
-  // Quick stat for the Timeline card (Safe Version)
   const nextExamDisplay = useMemo(() => {
     if (!activeSchedule || activeSchedule.length === 0) return t('timeline.no_active_exam');
     try {
@@ -122,138 +37,146 @@ const WelcomePage: React.FC = () => {
       }
       return t('timeline.all_finished');
     } catch (err) {
-      console.error("Error processing schedule dates:", err);
       return "Error loading data";
     }
   }, [activeSchedule, t]);
 
+  const cards = [
+    {
+      title: t('welcome.timeline'),
+      subtitle: nextExamDisplay,
+      icon: Clock,
+      onClick: () => navigate('/timeline'),
+      accent: 'blue',
+      size: 'large'
+    },
+    {
+      title: t('welcome.import'),
+      subtitle: t('import.desc'),
+      icon: Settings,
+      onClick: () => navigate('/import'),
+      accent: 'slate',
+      size: 'small'
+    },
+    {
+      title: t('welcome.example'),
+      subtitle: 'Playground Mode',
+      icon: PlayCircle,
+      onClick: () => navigate('/example'),
+      accent: 'slate',
+      size: 'small'
+    }
+  ];
+
   return (
-    <div className="fixed inset-0 min-h-[100dvh] w-screen bg-black flex flex-col items-center py-12 px-4 md:px-6 overflow-y-auto font-['Outfit'] text-white selection:bg-blue-500/30 selection:text-blue-200 supports-[height:100dvh]:h-[100dvh]">
+    <div className="fixed inset-0 min-h-screen w-screen bg-[#050505] flex flex-col items-center justify-center overflow-hidden text-white">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#050505] to-black pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/[0.03] blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-500/[0.02] blur-[120px] rounded-full pointer-events-none" />
       
-      {/* 1. Background: Breathing Dot Matrix - Optimized opacity animation */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.3 }} 
-        transition={{ duration: 2 }}
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-          willChange: 'opacity'
-        }}
-      />
-      
-      {/* 2. Ambient Spotlight (Center) - Responsive sizing */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vmin] h-[80vmin] max-w-[1000px] max-h-[1000px] pointer-events-none rounded-full"
-        style={{
-            background: 'radial-gradient(circle, rgba(30, 58, 138, 0.2) 0%, transparent 70%)',
-            willChange: 'transform'
-        }}
-      />
-      
-      {/* 3. Vignette Mask - Lighter for better visibility on bad screens */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,black_100%)] pointer-events-none" />
-
-      {/* Main Content Container - Responsive Width */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="z-10 w-full max-w-7xl flex flex-col gap-6 md:gap-12 my-auto px-2 md:px-0"
-      >
-        {/* Header Section */}
-        <div className="text-center space-y-2 md:space-y-4">
-          <motion.h1 
-            variants={titleVariants}
-            style={{ willChange: 'transform, opacity' }}
-            className="text-[10vmin] md:text-7xl lg:text-8xl font-bold tracking-tighter text-white drop-shadow-sm leading-none"
-          >
-            {t('welcome.title')}
-          </motion.h1>
-          <motion.div className="flex items-center justify-center gap-4">
-             <motion.div 
-                variants={lineVariants} 
-                style={{ originX: 1 }}
-                className="h-[1px] w-8 md:w-12 bg-gradient-to-r from-transparent to-gray-600" 
-             />
-             <motion.p 
-               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 1 } } }}
-               className="text-[10px] md:text-sm lg:text-base font-medium text-gray-400 tracking-[0.3em] md:tracking-[0.4em] uppercase"
-             >
-               EXAM KANBAN SYSTEM
-             </motion.p>
-             <motion.div 
-                variants={lineVariants} 
-                style={{ originX: 0 }}
-                className="h-[1px] w-8 md:w-12 bg-gradient-to-l from-transparent to-gray-600" 
-             />
-          </motion.div>
-        </div>
-
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 h-auto md:h-[400px]">
-          
-          {/* 1. Timeline: Hero Card (Span 2 cols) */}
-          <BentoCard 
-            title={t('welcome.timeline')}
-            subtitle={nextExamDisplay}
-            icon={Clock}
-            onClick={() => navigate('/timeline')}
-            className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#1a1a1a] to-[#111]"
-            accentColor="text-blue-400"
-          />
-
-          {/* 2. Import (Top Right) */}
-          <BentoCard 
-            title={t('welcome.import')}
-            subtitle={t('import.desc')}
-            icon={Settings}
-            onClick={() => navigate('/import')}
-            className="md:col-span-1"
-            accentColor="text-purple-400"
-          />
-
-          {/* 3. Example (Bottom Right) */}
-          <BentoCard 
-            title={t('welcome.example')}
-            subtitle="Playground Mode"
-            icon={PlayCircle}
-            onClick={() => navigate('/example')}
-            className="md:col-span-1"
-            accentColor="text-emerald-400"
-          />
-        </div>
-
-        {/* Footer Status Bar */}
-        <motion.div 
-          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 1.5, duration: 1 } } }}
-          className="flex justify-between items-center text-xs font-mono text-gray-600 pt-8 border-t border-white/5"
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-5xl px-6">
+        
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-16"
         >
-          <div className="flex gap-4">
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              SYSTEM ONLINE
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-white mb-4">
+            {t('welcome.title')}
+          </h1>
+          <div className="flex items-center justify-center gap-4">
+            <div className="h-px w-12 bg-white/10" />
+            <span className="text-[11px] uppercase tracking-[0.3em] text-white/40 font-medium">
+              Exam Kanban System
             </span>
-            <span>{new Date().getFullYear()} © KANBAN</span>
+            <div className="h-px w-12 bg-white/10" />
           </div>
-          <div className="flex gap-6">
-            <button 
-                onClick={() => setShowAbout(true)}
-                className="hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest"
+        </motion.div>
+
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Main Card - Timeline */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            onClick={() => navigate('/timeline')}
+            className="md:col-span-1 md:row-span-2 group cursor-pointer"
+          >
+            <div className="h-full min-h-[320px] bg-white/[0.02] backdrop-blur-sm border border-white/[0.06] rounded-2xl p-8 flex flex-col justify-between hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-300">
+              <div className="flex justify-between items-start">
+                <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400">
+                  <Clock size={24} strokeWidth={1.5} />
+                </div>
+                <ArrowRight size={20} className="text-white/20 group-hover:text-white/60 transition-colors" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-medium text-white mb-2">{t('welcome.timeline')}</h3>
+                <p className="text-sm text-white/40">{nextExamDisplay}</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Secondary Cards */}
+          {cards.slice(1).map((card, index) => (
+            <motion.div
+              key={card.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              onClick={card.onClick}
+              className="group cursor-pointer"
             >
-                <Info size={14} />
-                ABOUT
+              <div className="h-full bg-white/[0.02] backdrop-blur-sm border border-white/[0.06] rounded-2xl p-6 flex items-center gap-5 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-300">
+                <div className="p-3 rounded-xl bg-white/[0.04] text-white/60 group-hover:text-white/80 transition-colors">
+                  <card.icon size={22} strokeWidth={1.5} />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-medium text-white mb-1">{card.title}</h3>
+                  <p className="text-xs text-white/40">{card.subtitle}</p>
+                </div>
+                <ArrowRight size={16} className="text-white/20 group-hover:text-white/40 transition-colors" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex justify-between items-center mt-16 pt-8 border-t border-white/[0.06]"
+        >
+          <div className="flex items-center gap-6 text-[11px] text-white/30 font-mono">
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              System Online
+            </span>
+            <span>{new Date().getFullYear()}</span>
+          </div>
+          
+          <div className="flex items-center gap-6">
+            <button 
+              onClick={() => setShowAbout(true)}
+              className="flex items-center gap-2 text-[11px] text-white/40 hover:text-white/70 transition-colors uppercase tracking-wider"
+            >
+              <Info size={14} />
+              About
             </button>
             <button 
-                onClick={toggleLanguage} 
-                className="hover:text-white transition-colors uppercase tracking-widest"
+              onClick={toggleLanguage}
+              className="text-[11px] text-white/40 hover:text-white/70 transition-colors uppercase tracking-wider"
             >
-                {i18n.language === 'zh' ? 'EN / 中文' : 'ENGLISH / 中文'}
+              {i18n.language === 'zh' ? 'EN / 中文' : 'English'}
             </button>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* About Modal */}
       <AnimatePresence>

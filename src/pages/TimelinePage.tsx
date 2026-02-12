@@ -111,20 +111,18 @@ const TimelinePage: React.FC = () => {
          />
        );
        break;
-    case 'pending':
-    case 'break':
-      content = (
-        <AmbientMode
-          key="ambient"
-          nextExam={nextExam}
-          timeUntilNext={timeUntilNext}
-          formatTime={formatTime}
-          currentTime={currentTime}
-          currentStatus={currentStatus}
-          examSchedule={examSchedule}
-        />
-      );
-      break;
+     case 'pending':
+     case 'break':
+       content = (
+         <AmbientMode
+           key="ambient"
+           nextExam={nextExam}
+           timeUntilNext={timeUntilNext}
+           formatTime={formatTime}
+           currentTime={currentTime}
+         />
+       );
+       break;
     case 'finished':
       content = (
         <motion.div

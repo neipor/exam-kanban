@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { type ExamScheduleItem } from '../types';
-import { AlertTriangle } from 'lucide-react';
 
 interface CollectionModeProps {
   currentExam: ExamScheduleItem;
@@ -12,49 +11,45 @@ const CollectionMode: React.FC<CollectionModeProps> = ({ currentExam }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-red-950 flex flex-col items-center justify-center overflow-hidden font-['JetBrains_Mono'] z-50">
-      {/* Flashing Background Overlay */}
-      <motion.div 
-        animate={{ opacity: [0, 0.2, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        style={{ willChange: 'opacity' }}
-        className="absolute inset-0 bg-red-600 pointer-events-none"
-      />
-
+    <div className="fixed inset-0 h-screen w-screen bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
       {/* Content */}
-      <div className="z-10 flex flex-col items-center text-center max-w-[90vw] px-6 relative">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-3xl px-6">
         
+        {/* Subject label */}
         <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          style={{ willChange: 'transform' }}
-          className="mb-4 md:mb-8 text-red-500"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-6 md:mb-8"
         >
-           <AlertTriangle size={80} strokeWidth={1.5} className="w-[15vmin] h-[15vmin]" />
+          <span className="text-sm md:text-base uppercase tracking-[0.3em] text-white/50 font-medium block mb-3">
+            {t('timeline.subject')}
+          </span>
+          <span className="text-3xl md:text-4xl text-white font-semibold">
+            {currentExam.subject}
+          </span>
         </motion.div>
 
-        <h2 className="text-[4vmin] md:text-3xl font-medium text-red-200 opacity-80 mb-2 md:mb-4 tracking-widest uppercase">
-          {currentExam.subject}
-        </h2>
+        {/* Main text - BIG AND BOLD */}
+        <motion.h1
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="text-[18vmin] md:text-[180px] font-bold text-white tracking-tight leading-none mb-6"
+        >
+          {t('timeline.pens_down')}
+        </motion.h1>
 
-        <div className="relative">
-          <h1 
-            className="text-[15vmin] md:text-9xl font-black text-white tracking-tighter uppercase leading-none"
-            style={{ textShadow: '0 0 30px rgba(220,38,38,0.8)' }}
-          >
-            {t('timeline.pens_down')}
-          </h1>
-        </div>
-
-        <p className="mt-4 md:mt-8 text-[3vmin] md:text-2xl text-red-100 font-bold tracking-wide bg-red-900/30 px-6 py-3 rounded-full border border-red-500/30">
-           {t('timeline.wait_for_collection')}
-        </p>
-
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="text-xl md:text-2xl text-white/70 font-medium tracking-wide"
+        >
+          {t('timeline.wait_for_collection')}
+        </motion.p>
       </div>
-
-      {/* Footer Stripe */}
-      <div className="fixed bottom-0 w-full h-2 bg-red-500/50" />
-      <div className="fixed top-0 w-full h-2 bg-red-500/50" />
     </div>
   );
 };
