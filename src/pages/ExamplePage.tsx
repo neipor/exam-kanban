@@ -50,8 +50,7 @@ const ExamplePage: React.FC = () => {
     currentExam,
     nextExam,
     timeUntilEnd,
-    timeUntilNext,
-    examSchedule
+    timeUntilNext
   } = useExamTimer({ schedule: activeSchedule, currentTime });
 
   // Slider handlers
@@ -79,20 +78,18 @@ const ExamplePage: React.FC = () => {
         />
       );
       break;
-    case 'pending':
-    case 'break':
-      content = (
-        <AmbientMode
-          key="ambient"
-          nextExam={nextExam}
-          timeUntilNext={timeUntilNext}
-          formatTime={formatTime}
-          currentTime={currentTime}
-          currentStatus={currentStatus}
-          examSchedule={examSchedule}
-        />
-      );
-      break;
+     case 'pending':
+     case 'break':
+       content = (
+         <AmbientMode
+           key="ambient"
+           nextExam={nextExam}
+           timeUntilNext={timeUntilNext}
+           formatTime={formatTime}
+           currentTime={currentTime}
+         />
+       );
+       break;
     default:
       content = (
         <div className="fixed inset-0 h-full w-full bg-black flex flex-col items-center justify-center overflow-hidden font-['JetBrains_Mono'] selection:bg-white/20">

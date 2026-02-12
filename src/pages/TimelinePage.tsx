@@ -49,8 +49,7 @@ const TimelinePage: React.FC = () => {
     currentExam,
     nextExam,
     timeUntilEnd,
-    timeUntilNext,
-    examSchedule
+    timeUntilNext
   } = useExamTimer({ schedule: activeSchedule, currentTime });
 
   // --- Handlers ---
