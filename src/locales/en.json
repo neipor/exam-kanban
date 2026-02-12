@@ -31,7 +31,8 @@
       "delay_current": "Extend Current Exam",
       "add_5_min": "+5 Min",
       "add_1_min": "+1 Min",
-      "unlock_exit": "Long Press to Unlock"
+      "unlock_exit": "Long Press to Unlock",
+      "current_end": "Current End:"
     }
   },
   "playground": {

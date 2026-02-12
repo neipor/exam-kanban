@@ -304,7 +304,7 @@ const TimelinePage: React.FC = () => {
                     </div>
                     <div className="pt-2 border-t border-white/10 mt-2">
                         <div className="flex justify-between text-xs text-gray-500 font-mono">
-                            <span>Current End:</span>
+                            <span>{t('emergency.current_end')}</span>
                             <span>{currentExam.endTime.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
                         </div>
                     </div>

@@ -31,7 +31,8 @@
       "delay_current": "延长当前考试",
       "add_5_min": "+5 分钟",
       "add_1_min": "+1 分钟",
-      "unlock_exit": "长按解锁退出"
+      "unlock_exit": "长按解锁退出",
+      "current_end": "当前结束:"
     }
   },
   "playground": {
